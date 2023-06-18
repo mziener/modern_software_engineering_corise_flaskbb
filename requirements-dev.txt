@@ -13,6 +13,7 @@ pytest-mock
 pytest-xdist
 pytest-flask
 pytest-playwright
+playwright
 psutil
 responses
 tox>=3.0.0
