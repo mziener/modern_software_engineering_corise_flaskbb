@@ -15,6 +15,7 @@ on:
       - '**/AUTHORS'
       - '**/LICENSE'
   pull_request:
+    types: [opened]
   # CoRise TODO: modify this workflow to run on each pull request
 
 jobs:
@@ -55,6 +56,15 @@ jobs:
     - name: Prepare FlaskBB
       run: |
         flaskbb translations compile
+
+    - name: flake8
+      run: |
+        flake8 . --select=E9,F63,F7,F82
+
+    - name: flake8 stats
+      run: |
+        flake8 . --error-zero --statistics
+
     
     # CoRise TODO: add another job to the workflow that will run flake8 and report any errors that were introduced in the proposed change
         
