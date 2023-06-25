@@ -1,2 +1,4 @@
 # Default code owners who can approve any pull request
-* @navteniev @maxallen @steverharaguchi
+# CoRise TODO: add yourself, the course instructor, and TA as code owners
+
+* @mziener @ethankgod @navteniev
