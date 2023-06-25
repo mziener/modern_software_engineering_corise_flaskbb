@@ -27,9 +27,10 @@ from flaskbb.forum.forms import (EditTopicForm, NewTopicForm, QuickreplyForm,
                                  UserSearchForm)
 from flaskbb.forum.models import (Category, Forum, ForumsRead, Post, Topic,
                                   TopicsRead)
+from flaskbb.forum.topic_manager import TopicManager
 from flaskbb.markup import make_renderer
 from flaskbb.user.models import User
-from flaskbb.utils.helpers import (FlashAndRedirect, do_topic_action,
+from flaskbb.utils.helpers import (FlashAndRedirect,
                                    format_quote, get_online_users, real,
                                    register_view, render_template, time_diff,
                                    time_utcnow)
@@ -404,56 +405,31 @@ class ManageForum(MethodView):
             return redirect(mod_forum_url)
 
         # locking/unlocking
+        topic_manager = TopicManager(tmp_topics)
         if "lock" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="locked",
-                reverse=False
-            )
-
+            changed = topic_manager.set_attribute("lock", True)
             flash(_("%(count)s topics locked.", count=changed), "success")
             return redirect(mod_forum_url)
 
         elif "unlock" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="locked",
-                reverse=True
-            )
+            changed = topic_manager.set_attribute("lock", False)
             flash(_("%(count)s topics unlocked.", count=changed), "success")
             return redirect(mod_forum_url)
 
         # highlighting/trivializing
         elif "highlight" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="important",
-                reverse=False
-            )
+            changed = topic_manager.set_attribute("important", True)
             flash(_("%(count)s topics highlighted.", count=changed), "success")
             return redirect(mod_forum_url)
 
         elif "trivialize" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="important",
-                reverse=True
-            )
+            changed = topic_manager.set_attribute("important", False)
             flash(_("%(count)s topics trivialized.", count=changed), "success")
             return redirect(mod_forum_url)
 
         # deleting
         elif "delete" in request.form:
-            changed = do_topic_action(
-                topics=tmp_topics,
-                user=real(current_user),
-                action="delete",
-                reverse=False
-            )
+            changed = topic_manager.delete()
             flash(_("%(count)s topics deleted.", count=changed), "success")
             return redirect(mod_forum_url)
 
