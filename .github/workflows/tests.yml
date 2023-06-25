@@ -14,6 +14,7 @@ on:
       - '**/CHANGES'
       - '**/AUTHORS'
       - '**/LICENSE'
+  pull_request:
   # CoRise TODO: modify this workflow to run on each pull request
 
 jobs:
